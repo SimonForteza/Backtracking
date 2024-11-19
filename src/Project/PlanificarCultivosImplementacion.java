@@ -24,7 +24,7 @@ public class PlanificarCultivosImplementacion implements PlanificarCultivos {
         String [][] matrizCultivos = new String[riesgos.length][riesgos[0].length]; //copiamos la matriz de riesgo para tener el mismo tamañp
         Set <Cultivo> cultivoSet = new HashSet<>();
 
-        List<CultivoSeleccionado> resultado = backtracking(cultivosDisponibles, cultivoSeleccionados, riesgos,gananciaParcial ,mejorGananciaGlobal, 0, matrizCultivos, cultivoSet);
+        List<CultivoSeleccionado> resultado = backtracking(cultivosDisponibles, cultivoSeleccionados, riesgos,gananciaParcial ,mejorGananciaGlobal, 0, matrizCultivos);
         System.out.println(resultado);
         return cultivoSeleccionados;
     }
@@ -36,8 +36,7 @@ public class PlanificarCultivosImplementacion implements PlanificarCultivos {
             double gananciaParcial,
             double mejorGanancia,
             int indiceCultivo, //nivel
-            String[][] matrizCultivos,
-            Set<Cultivo> cultivoSet) {
+            String[][] matrizCultivos) {
 
         //poda
         // Si la ganancia parcial ya es menor que la mejor ganancia global, no seguimos con esta rama.
@@ -98,8 +97,7 @@ public class PlanificarCultivosImplementacion implements PlanificarCultivos {
                                 List<CultivoSeleccionado> resultadoRecursivo = backtracking(
                                         cultivosDisponibles, cultivoSeleccionados, riesgos,
                                         nuevaGanancia, mejorGanancia, indiceCultivo + 1,
-                                        matrizCultivos, cultivoSet
-                                );
+                                        matrizCultivos);
 
                                 // Paso 6: Actualizamos el mejor resultado si es necesario
                                 if (nuevaGanancia > mejorGanancia) {
@@ -124,8 +122,7 @@ public class PlanificarCultivosImplementacion implements PlanificarCultivos {
         List<CultivoSeleccionado> resultadoSinColocar = backtracking(
                 cultivosDisponibles, cultivoSeleccionados, riesgos,
                 gananciaParcial, mejorGanancia, indiceCultivo + 1,
-                matrizCultivos, cultivoSet
-        );
+                matrizCultivos);
 
         // Retornamos el mejor resultado encontrado entre colocar o no colocar el cultivo
         System.out.println("Retornando el mejor resultado entre colocar y no colocar el cultivo " + cultivoActual.getNombre());
