@@ -39,7 +39,7 @@ public class PlanificarCultivosImplementacion implements PlanificarCultivos {
             String[][] matrizCultivos,
             Set<Cultivo> cultivoSet) {
 
-        // Paso 1: Verificar poda
+        //poda
         // Si la ganancia parcial ya es menor que la mejor ganancia global, no seguimos con esta rama.
         if (gananciaParcial < mejorGanancia) {
             System.out.println("Poda: La ganancia parcial es menor que la mejor ganancia global. Saliendo de la rama.");
@@ -59,10 +59,7 @@ public class PlanificarCultivosImplementacion implements PlanificarCultivos {
         Cultivo cultivoActual = cultivosDisponibles.get(indiceCultivo);
         System.out.println("\nExplorando cultivo: " + cultivoActual.getNombre());
 
-        // Paso 2: Ordenar los cultivos disponibles si lo consideramos necesario
-        // Aquí podrías ordenar los cultivos por alguna métrica, por ejemplo, la ganancia estimada
-        // cultivosDisponibles.sort(Comparator.comparingDouble(Cultivo::getGananciaEstimada));
-
+        //seleccionar un cultivo
         List<CultivoSeleccionado> mejorSeleccion = new ArrayList<>(cultivoSeleccionados); // Copia la configuración actual
 
         for (int i = 0; i < riesgos.length; i++) {
@@ -71,10 +68,9 @@ public class PlanificarCultivosImplementacion implements PlanificarCultivos {
                     for (int ancho = 1; ancho + alto <= Math.min(11, riesgos[0].length - j); ancho++) {
 
                         Coordenada arribaIzq = new Coordenada(i, j);
-                        Coordenada abajoDerecha = new Coordenada(i + alto - 1, j + ancho - 1);
+                        Coordenada abajoDerecha = new Coordenada(i + alto - 1,  j + ancho - 1);
 
-                        // Paso 3: Validación del área para evitar cultivos solapados
-                        // Verificamos que la colocación no se salga del campo ni solape con otros cultivos
+                        //Validación del área para evitar cultivos solapados
                         if (abajoDerecha.getX() < riesgos.length && abajoDerecha.getY() < riesgos[0].length) {
                             if (Utils.esAreaValida(arribaIzq, abajoDerecha, matrizCultivos, cultivoActual)) {
                                 System.out.println("Colocando cultivo en el área: " + arribaIzq + " a " + abajoDerecha);
@@ -123,7 +119,7 @@ public class PlanificarCultivosImplementacion implements PlanificarCultivos {
             }
         }
 
-        // Paso 7: Intentamos avanzar al siguiente cultivo sin colocar el actual
+        //evaluamos el siguiente cultivo sin colocar el actual
         System.out.println("Intentando avanzar sin colocar el cultivo " + cultivoActual.getNombre());
         List<CultivoSeleccionado> resultadoSinColocar = backtracking(
                 cultivosDisponibles, cultivoSeleccionados, riesgos,
@@ -131,7 +127,7 @@ public class PlanificarCultivosImplementacion implements PlanificarCultivos {
                 matrizCultivos, cultivoSet
         );
 
-        // Paso 8: Retornamos el mejor resultado encontrado entre colocar o no colocar el cultivo
+        // Retornamos el mejor resultado encontrado entre colocar o no colocar el cultivo
         System.out.println("Retornando el mejor resultado entre colocar y no colocar el cultivo " + cultivoActual.getNombre());
         return resultadoSinColocar.size() > mejorSeleccion.size() ? resultadoSinColocar : mejorSeleccion;
     }
